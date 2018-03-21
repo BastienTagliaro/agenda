@@ -136,6 +136,9 @@ public class SyncService extends JobIntentService {
                         databaseHandler.ajouter(new Cours(currentCours.getNomCours(), currentCours.getSalle(), currentCours.getDescription(),
                                 currentCours.getDate(), currentCours.getHeureDebut(), currentCours.getHeureFin()));
                     }
+
+                    Intent updateIntent = new Intent("urca.UPDATE_CALENDAR");
+                    sendBroadcast(updateIntent);
                 }
             }
         }
