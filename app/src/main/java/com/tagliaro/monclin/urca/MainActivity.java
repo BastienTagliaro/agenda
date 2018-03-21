@@ -1,6 +1,5 @@
 package com.tagliaro.monclin.urca;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,19 +29,5 @@ public class MainActivity extends AppCompatActivity {
         if(!folder.exists())
             success = folder.mkdirs();
 
-        if(success) {
-            System.out.println("Created directory");
-
-
-
-//            startService(new Intent(this, DownloadService.class));
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        stopService(new Intent(this, DownloadService.class)); // TEMPORARY, REMOVE LATER
-
-        super.onDestroy();
     }
 }
