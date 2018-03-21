@@ -9,7 +9,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        if(action.equals("urca.ACTION")) {
+        if(action.equals("com.tagliaro.monclin.urca.SYNC")) {
             System.out.println("Received Broadcast");
 
             // Call SyncService here

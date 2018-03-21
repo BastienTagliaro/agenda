@@ -19,7 +19,7 @@ public class AlarmSetter extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        alarmIntent.setAction("urca.ACTION");
+        alarmIntent.setAction("com.tagliaro.monclin.urca.SYNC");
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         Calendar calendar = Calendar.getInstance();
