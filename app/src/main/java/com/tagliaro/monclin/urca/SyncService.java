@@ -41,6 +41,7 @@ public class SyncService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
+        DatabaseHandler databaseHandler = new DatabaseHandler(getApplicationContext());
         Boolean downloaded = false;
         Log.d(getClass().getSimpleName(), "Service is running");
 
@@ -81,17 +82,19 @@ public class SyncService extends JobIntentService {
                 }
 
                 if (calendar != null) {
+                    // Reset tables and their content since we now have the new calendar content
+                    databaseHandler.doTable();
+
                     Pattern date = Pattern.compile("([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2})([0-9]{2})");
-                    List<EventData> events = new ArrayList<>();
+                    List<Cours> cours = new ArrayList<>();
                     int index = 0;
 
                     for(Iterator i = calendar.getComponents().iterator(); i.hasNext(); index++) {
                         Component component = (Component) i.next();
-//                    System.out.println("Component [" + component.getName() + "]");
-
-                        events.add(new EventData());
+                        cours.add(new Cours());
 
                         for(Iterator j = component.getProperties().iterator(); j.hasNext();) {
+                            Cours currentCours = cours.get(index);
                             Property property = (Property) j.next();
 
                             switch(property.getName()) {
@@ -100,49 +103,39 @@ public class SyncService extends JobIntentService {
                                     Matcher m = date.matcher(property.getValue());
 
                                     if(m.matches()) {
-//                                    System.out.println(m.group(1) + m.group(2) + m.group(3) + m.group(4) + m.group(5) + m.group(6));
-                                        int year = Integer.parseInt(m.group(1));
-                                        int month = Integer.parseInt(m.group(2));
-                                        int day = Integer.parseInt(m.group(3));
-                                        int hours = Integer.parseInt(m.group(4));
-                                        int minutes = Integer.parseInt(m.group(5));
-                                        int seconds = Integer.parseInt(m.group(6));
+                                        String year = m.group(1);
+                                        String month = m.group(2);
+                                        String day = m.group(3);
+                                        String hours = m.group(4);
+                                        String minutes = m.group(5);
 
-                                        String propertyName;
+                                        currentCours.setDate(day + "-" + month + "-" + year);
 
                                         if(property.getName().equals("DTSTART"))
-                                            propertyName = "_START";
+                                            currentCours.setHeureDebut(hours + ":" + minutes);
                                         else
-                                            propertyName = "_END";
-
-                                        events.get(index).add(new PropertyData("DAY" + propertyName, Integer.toString(day)));
-                                        events.get(index).add(new PropertyData("MONTH" + propertyName, Integer.toString(month)));
-                                        events.get(index).add(new PropertyData("YEAR" + propertyName, Integer.toString(year)));
-                                        events.get(index).add(new PropertyData("HOURS" + propertyName, Integer.toString(hours)));
-                                        events.get(index).add(new PropertyData("MINUTES" + propertyName, Integer.toString(minutes)));
-                                        events.get(index).add(new PropertyData("SECONDS" + propertyName, Integer.toString(seconds)));
+                                            currentCours.setHeureFin(hours + ":" + minutes);
                                     }
                                     break;
 
                                 case "SUMMARY":
+                                    currentCours.setNomCours(property.getValue());
+                                    break;
                                 case "DESCRIPTION":
+                                    currentCours.setDescription(property.getValue());
+                                    break;
                                 case "LOCATION":
-                                    events.get(index).add(new PropertyData(property.getName(), property.getValue()));
+                                    currentCours.setSalle(property.getValue());
                                     break;
                             }
-
-                            // System.out.println("Property [" + property.getName() + ", " + property.getValue() + "]");
                         }
                     }
 
-                    /*for(int i = 0; i < events.size(); ++i) {
-                        System.out.println("Event " + i);
-                        for(int j = 0; j < events.get(i).size(); ++j) {
-                            System.out.println("Property : " + events.get(i).get(j).getPropertyName() + " ; Value : " + events.get(i).get(j).getPropertyValue());
-                        }
-
-                        // Add to database
-                    }*/
+                    for(int i = 0; i < cours.size(); ++i) {
+                        Cours currentCours = cours.get(i);
+                        databaseHandler.ajouter(new Cours(currentCours.getNomCours(), currentCours.getSalle(), currentCours.getDescription(),
+                                currentCours.getDate(), currentCours.getHeureDebut(), currentCours.getHeureFin()));
+                    }
                 }
             }
         }
