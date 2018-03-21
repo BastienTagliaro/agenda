@@ -1,11 +1,11 @@
-package com.tagliaro.monclin.agendaurca;
+package com.tagliaro.monclin.urca;
 
 /*
     Pour ajouter des cours dans la base de données
 
         DatabaseHandler db = new DatabaseHandler(this);
 
-        db.doTable(); // Remet a 0 la base de donné et recrée les tables.
+        db.doTable(); // Remet à 0 la base de données et recrée les tables.
 
         db.ajouter(new Cours("INFO0406", "3-S26", "INFO0406 \n[enseignant]Ayaida \n[salle] 3-S26",
                 "13-03-2018", "16h00", "19h00"));
