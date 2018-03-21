@@ -1,9 +1,5 @@
 package com.tagliaro.monclin.urca;
 
-/**
- * Created by bastien on 13/03/18.
- */
-
 public class PropertyData {
     private String propertyName, propertyValue;
 

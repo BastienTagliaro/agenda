@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Temporary, this will be up to the user to choose in settings
         editor.putString("agenda", "http://agenda.univ-reims.fr/ical.php?cle=33fc8e511b003f20a2a9cbbb3c5eec2e");
+        editor.putInt("interval", 30);
         editor.apply();
 
         File folder = new File(Environment.getExternalStorageDirectory() + File.separator + getPackageName());
@@ -31,7 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(success) {
             System.out.println("Created directory");
-            startService(new Intent(this, DownloadService.class));
+
+
+
+//            startService(new Intent(this, DownloadService.class));
         }
     }
 

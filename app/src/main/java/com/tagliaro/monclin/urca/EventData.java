@@ -3,10 +3,6 @@ package com.tagliaro.monclin.urca;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by bastien on 13/03/18.
- */
-
 public class EventData {
     private List<PropertyData> propertyDataList = new ArrayList<>();
     private int index;
