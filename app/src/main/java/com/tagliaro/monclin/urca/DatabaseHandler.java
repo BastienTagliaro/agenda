@@ -57,7 +57,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         mDb.execSQL(DROP_TABLE);
     }
 
-    public void doTable() { mDb.execSQL(CREATE_TABLE); }
+    public void doTable() {
+        SQLiteDatabase db = this.open();
+        db.execSQL(DROP_TABLE);
+        db.execSQL(CREATE_TABLE);
+    }
 
     public void close() {
         mDb.close();
@@ -81,24 +85,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cours getCours(int id) {
+    public List<Cours> getCours(String date) {
+        List<Cours> coursList = new ArrayList<>();
         SQLiteDatabase db = this.open();
 
         Cursor cursor = db.query(NAME_TABLE, new String[] { KEY, NOMCOURS, SALLE, DESCRIPTION, DATE,
-        HEUREDEBUT, HEUREFIN}, KEY + "=?", new String[] { String.valueOf(id)}, null, null, null);
+        HEUREDEBUT, HEUREFIN}, DATE + "=?", new String[] {date }, null, null, null);
 
-        if(cursor != null)
-            cursor.moveToFirst();
+        if (cursor.moveToFirst()) {
+            do {
+                Cours cours = new Cours(Integer.parseInt(cursor.getString(0)), cursor.getString(1)
+                        , cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                        cursor.getString(5), cursor.getString(6));
+                coursList.add(cours);
+            } while (cursor.moveToNext());
 
-        Cours cours = new Cours(Integer.parseInt(cursor.getString(0)), cursor.getString(1)
-        , cursor.getString(2), cursor.getString(3), cursor.getString(4),
-                cursor.getString(5), cursor.getString(6));
-
+        }
         cursor.close();
         db.close();
-        return cours;
+        return coursList;
     }
 
+    /*
     public List<Cours> getAllCours() {
         List<Cours> coursList = new ArrayList<>();
 
@@ -126,6 +134,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return coursList;
     }
+
 
     public int getCoursCount() {
         String query = "SELECT * FROM " + NAME_TABLE;
@@ -158,4 +167,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[] { String.valueOf(c.getId())});
         db.close();
     }
+
+    */
 }
