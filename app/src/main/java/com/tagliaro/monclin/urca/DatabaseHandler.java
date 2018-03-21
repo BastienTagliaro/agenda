@@ -1,4 +1,4 @@
-package com.tagliaro.monclin.agendaurca;
+package com.tagliaro.monclin.urca;
 
 import android.content.ContentValues;
 import android.content.Context;
