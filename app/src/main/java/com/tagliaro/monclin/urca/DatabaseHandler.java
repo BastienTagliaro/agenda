@@ -90,7 +90,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.open();
 
         Cursor cursor = db.query(NAME_TABLE, new String[] { KEY, NOMCOURS, SALLE, DESCRIPTION, DATE,
-        HEUREDEBUT, HEUREFIN}, DATE + "=?", new String[] {date }, null, null, null);
+        HEUREDEBUT, HEUREFIN}, DATE + "=?", new String[] {date }, null, null, HEUREDEBUT);
 
         if (cursor.moveToFirst()) {
             do {
