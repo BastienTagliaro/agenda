@@ -25,9 +25,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -136,6 +138,14 @@ public class SyncService extends JobIntentService {
                         databaseHandler.ajouter(new Cours(currentCours.getNomCours(), currentCours.getSalle(), currentCours.getDescription(),
                                 currentCours.getDate(), currentCours.getHeureDebut(), currentCours.getHeureFin()));
                     }
+
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.FRANCE);
+                    String lastUpdate = dateFormat.format(java.util.Calendar.getInstance().getTime());
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("lastUpdate", lastUpdate);
+                    editor.apply();
 
                     Intent updateIntent = new Intent("urca.UPDATE_CALENDAR");
                     sendBroadcast(updateIntent);
