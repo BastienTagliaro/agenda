@@ -13,18 +13,23 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="13dp"
         android:fontFamily="monospace"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:textSize="18dp"
         android:text="CM INFO0403" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/className"
         android:layout_alignBottom="@+id/className"
-        android:layout_marginLeft="41dp"
-        android:layout_marginStart="41dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginStart="36dp"
         android:layout_toEndOf="@+id/className"
         android:layout_toRightOf="@+id/className"
-        android:text="8h00 - 10h00" />
+        android:text="8h00 - 10h00"
+        android:textColor="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/location"
@@ -35,6 +40,6 @@
         android:layout_below="@+id/className"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
-        android:text="[salle] Salle
-Amphi E 2-R05 (Moulin de la Housse (Sciences et STAPS))" />
+        android:textColor="@color/colorPrimary"
+        android:text="Salle Amphi E 2-R05 (Moulin de la Housse (Sciences et STAPS))" />
 </RelativeLayout>
