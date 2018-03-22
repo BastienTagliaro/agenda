@@ -13,6 +13,7 @@ import java.util.Calendar;
 public class AlarmSetter extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("Received intent");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Integer intervalInMinutes = sharedPreferences.getInt("interval", 30);
 
