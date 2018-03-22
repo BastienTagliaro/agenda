@@ -106,6 +106,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return coursList;
     }
 
+    public Cours getCours(Long id) {
+        SQLiteDatabase db = this.open();
+        Cours cours = null;
+
+        Cursor cursor = db.query(NAME_TABLE,
+                new String[] { KEY, NOMCOURS, SALLE, DESCRIPTION, DATE, HEUREDEBUT, HEUREFIN },
+                KEY + "=?", new String[] { Long.toString(id) },
+                null,
+                null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            cours = new Cours(Integer.parseInt(cursor.getString(0)), cursor.getString(1)
+                        , cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                        cursor.getString(5), cursor.getString(6));
+        }
+
+        cursor.close();
+        db.close();
+        return cours;
+    }
+
     /*
     public List<Cours> getAllCours() {
         List<Cours> coursList = new ArrayList<>();
