@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
@@ -54,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
                 month += 1;
                 currentDate = String.format(Locale.FRANCE, "%02d", day) + "-" + String.format(Locale.FRANCE, "%02d", month) + "-" + Integer.toString(year);
                 setListItems(getApplicationContext(), R.layout.classes_view, currentDate);
+            }
+        });
+
+        classesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Long classID = (Long) view.getTag();
+
+                Intent intent = new Intent(getApplicationContext(), Details.class);
+                intent.putExtra("id", classID);
+                startActivity(intent);
             }
         });
 
