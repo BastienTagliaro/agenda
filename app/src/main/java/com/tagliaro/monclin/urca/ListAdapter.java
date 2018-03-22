@@ -51,6 +51,8 @@ public class ListAdapter extends ArrayAdapter<Cours> {
             if(location != null) {
                 location.setText(c.getSalle());
             }
+
+            v.setTag(c.getId());
         }
 
         return v;
