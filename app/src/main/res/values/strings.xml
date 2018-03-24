@@ -23,4 +23,7 @@
     <string name="remind_me">Remind me...</string>
     <string name="remind_me_summary">Choose when the application reminds you about an event</string>
     <string name="notifications">Notifications</string>
+    <string name="retry_permission">RE-TRY</string>
+    <string name="im_sure_permission">I\'M SURE</string>
+    <string name="permission_denied">Permission denied</string>
 </resources>
