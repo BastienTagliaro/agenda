@@ -35,17 +35,20 @@
         <receiver android:name=".AlarmSetter">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="com.tagliaro.monclin.urca.RESET_ALARM" />
+                <action android:name="com.tagliaro.monclin.urca_SET_SYNC" />
+                <action android:name="com.tagliaro.monclin.urca.SET_REMINDER" />
             </intent-filter>
         </receiver>
 
         <activity
             android:name=".DetailsActivity"
-            android:label="@string/title_activity_details"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_details" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".NewEventActivity"
+            android:label="@string/new_event" />
     </application>
 
 </manifest>
