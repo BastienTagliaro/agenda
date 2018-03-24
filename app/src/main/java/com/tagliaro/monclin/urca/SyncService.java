@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
@@ -35,7 +36,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SyncService extends JobIntentService {
-    static final int JOB_ID = 1000;
+    private static final int JOB_ID = 1000;
+    private final String TAG = getClass().getSimpleName();
 
     static void enqueueWork(Context context, Intent work) {
         enqueueWork(context, SyncService.class, JOB_ID, work);
@@ -45,7 +47,6 @@ public class SyncService extends JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
         DatabaseHandler databaseHandler = new DatabaseHandler(getApplicationContext());
         Boolean downloaded = false;
-        Log.d(getClass().getSimpleName(), "Service is running");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -62,7 +63,7 @@ public class SyncService extends JobIntentService {
             }
 
             if(downloaded) {
-                Log.d("SyncService", "onStartCommand | Download finished, continue");
+                Log.d(TAG, "onStartCommand | Download finished, continue");
                 File file = new File(path);
                 FileInputStream fin = null;
 
@@ -148,22 +149,23 @@ public class SyncService extends JobIntentService {
                     editor.apply();
 
                     Intent updateIntent = new Intent("urca.UPDATE_CALENDAR");
-                    sendBroadcast(updateIntent);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(updateIntent);
                 }
             }
         }
         else {
-            Log.d("SyncService", "URL doesn't exist");
+            Log.d(TAG, "URL doesn't exist");
         }
     }
 
     @Override
     public void onDestroy() {
-        Log.d("SyncService", "Service is stopping");
+        Log.d(TAG, "Service is stopping");
         super.onDestroy();
     }
 
     private static class DownloadTask extends AsyncTask<String, Void, Boolean> {
+        private static final String TAG = "DownloadTask";
         @Override
         protected Boolean doInBackground(String... params) {
             int count;
@@ -184,7 +186,7 @@ public class SyncService extends JobIntentService {
                     return false;
 
                 if(file.createNewFile() || file.exists()) {
-                    Log.d("SyncService", "doInBackground | Downloading file");
+                    Log.d(TAG, "doInBackground | Downloading file");
                     inputStream = connection.getInputStream();
                     outputStream = new FileOutputStream(path);
 
