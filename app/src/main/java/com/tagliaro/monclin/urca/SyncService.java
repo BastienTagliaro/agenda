@@ -49,7 +49,7 @@ public class SyncService extends JobIntentService {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String url = sharedPreferences.getString("agenda", null);
+        String url = sharedPreferences.getString("ical_file", null);
         String path = Environment.getExternalStorageDirectory() + File.separator + getPackageName() + File.separator + "calendar.ics";
 
         if(url != null) {
@@ -62,7 +62,7 @@ public class SyncService extends JobIntentService {
             }
 
             if(downloaded) {
-                System.out.println("onStartCommand | Download finished, continue");
+                Log.d("SyncService", "onStartCommand | Download finished, continue");
                 File file = new File(path);
                 FileInputStream fin = null;
 
@@ -153,13 +153,13 @@ public class SyncService extends JobIntentService {
             }
         }
         else {
-            System.out.println("URL doesn't exist");
+            Log.d("SyncService", "URL doesn't exist");
         }
     }
 
     @Override
     public void onDestroy() {
-        System.out.println("Service is stopping");
+        Log.d("SyncService", "Service is stopping");
         super.onDestroy();
     }
 
@@ -184,7 +184,7 @@ public class SyncService extends JobIntentService {
                     return false;
 
                 if(file.createNewFile() || file.exists()) {
-                    System.out.println("doInBackground | Downloading file");
+                    Log.d("SyncService", "doInBackground | Downloading file");
                     inputStream = connection.getInputStream();
                     outputStream = new FileOutputStream(path);
 
