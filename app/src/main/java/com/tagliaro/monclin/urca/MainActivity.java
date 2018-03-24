@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -32,7 +34,10 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import static android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences;
+
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = getClass().getSimpleName();
     private BroadcastReceiver updateReceiver;
     private String currentDate;
     CalendarView calendarView;
@@ -67,6 +72,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void process() {
+        Log.d(TAG, "process() called!");
+        SharedPreferences wmbPreference = getDefaultSharedPreferences(this);
+        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+        if (isFirstRun) {
+            // This is just to make sure the AlarmSetter is always running the Alarm
+            Intent intent = new Intent();
+            intent.setClass(this, AlarmSetter.class);
+            intent.setAction("com.tagliaro.monclin.urca_SET_SYNC");
+            sendBroadcast(intent);
+
+            SharedPreferences.Editor editor = wmbPreference.edit();
+            editor.putBoolean("FIRSTRUN", false);
+            editor.apply();
+        }
+
+        // Call SyncService here
+        Intent syncIntent = new Intent(this, SyncService.class);
+        SyncService.enqueueWork(this, syncIntent);
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
         currentDate = dateFormat.format(calendarView.getDate());
 
@@ -96,19 +120,26 @@ public class MainActivity extends AppCompatActivity {
             updateReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    Log.d("MainActivity","Received update broadcast, refreshing");
+                    Log.d(TAG,"Received update broadcast, refreshing");
 
                     setListItems(context, R.layout.classes_view, currentDate);
                 }
             };
-
-            // This is just to make sure the AlarmSetter is always running the Alarm
-            Intent intent = new Intent("com.tagliaro.monclin.urca.RESET_ALARM");
-            intent.setClass(this, AlarmSetter.class);
-            sendBroadcast(intent);
-
-            registerReceiver(updateReceiver, new IntentFilter("urca.UPDATE_CALENDAR"));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver, new IntentFilter("urca.UPDATE_CALENDAR"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateReceiver);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -187,20 +218,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_pref:
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
+                Intent pref = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(pref);
+                return true;
+            case R.id.menu_add:
+                Intent add = new Intent(getApplicationContext(), NewEventActivity.class);
+                startActivity(add);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if(updateReceiver != null) {
-            unregisterReceiver(updateReceiver);
-            updateReceiver = null;
-        }
-        super.onDestroy();
     }
 }
