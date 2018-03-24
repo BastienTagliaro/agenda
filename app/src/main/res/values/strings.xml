@@ -15,15 +15,19 @@
     <string name="classroom">Salle</string>
 
     <string name="permission_storage_required">Permission to write to external storage is needed to download the calendar\'s data. This application cannot work without the permission.</string>
-    <string name="general_settings">Paramètres généraux</string>
+    <string name="general_settings">General Settings</string>
     <string name="sync_frequency">Sync Frequency</string>
     <string name="sync_frequency_summary">Choose between different sync frequencies</string>
     <string name="ical_file">Link of .ical file</string>
     <string name="enable_reminders">Enable reminders</string>
-    <string name="remind_me">Remind me...</string>
+    <string name="remind_me">Remind me&#8230;</string>
     <string name="remind_me_summary">Choose when the application reminds you about an event</string>
     <string name="notifications">Notifications</string>
     <string name="retry_permission">RE-TRY</string>
     <string name="im_sure_permission">I\'M SURE</string>
     <string name="permission_denied">Permission denied</string>
+    <string name="new_event">New event</string>
+    <string name="add_event_menu">Add event</string>
+    <string name="settings_menu">Settings</string>
+    <string name="last_sync">Last sync: %1$s</string>
 </resources>
