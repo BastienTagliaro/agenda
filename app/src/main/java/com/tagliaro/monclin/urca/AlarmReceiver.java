@@ -3,6 +3,7 @@ package com.tagliaro.monclin.urca;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
@@ -10,7 +11,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String action = intent.getAction();
 
         if(action.equals("com.tagliaro.monclin.urca.SYNC")) {
-            System.out.println("Received Broadcast");
+            Log.d("AlarmReceiver", "Received Broadcast");
 
             // Call SyncService here
             Intent syncIntent = new Intent(context, SyncService.class);
