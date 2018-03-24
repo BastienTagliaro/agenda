@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tagliaro.monclin.urca.Details">
+    tools:context="com.tagliaro.monclin.urca.DetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -23,68 +23,164 @@
 
     <TextView
         android:id="@+id/startTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Début"
-        android:textSize="20dp"
+        android:layout_marginEnd="@dimen/classes_smaller_margins"
+        android:layout_marginRight="@dimen/classes_smaller_margins"
+        android:layout_marginStart="@dimen/classes_margins"
+        android:layout_marginLeft="@dimen/classes_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:text="@string/startTime"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
         android:id="@+id/startTime"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="8dp"
-        android:text="8:00"
-        android:textSize="20dp"
+        android:layout_marginEnd="@dimen/classes_margins"
+        android:layout_marginRight="@dimen/classes_margins"
+        android:layout_marginStart="@dimen/classes_smaller_margins"
+        android:layout_marginLeft="@dimen/classes_smaller_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
         android:id="@+id/endTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Fin"
-        android:textSize="20dp"
+        android:layout_marginEnd="@dimen/classes_smaller_margins"
+        android:layout_marginRight="@dimen/classes_smaller_margins"
+        android:layout_marginStart="@dimen/classes_margins"
+        android:layout_marginLeft="@dimen/classes_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:text="@string/endTime"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/startTime" />
 
     <TextView
         android:id="@+id/endTime"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="8dp"
-        android:text="10:00"
-        android:textSize="20dp"
+        android:layout_marginEnd="@dimen/classes_margins"
+        android:layout_marginRight="@dimen/classes_margins"
+        android:layout_marginStart="@dimen/classes_smaller_margins"
+        android:layout_marginLeft="@dimen/classes_smaller_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/startTime" />
 
     <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/teacherTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Description"
-        android:textSize="20dp"
+        android:layout_marginEnd="@dimen/classes_smaller_margins"
+        android:layout_marginRight="@dimen/classes_smaller_margins"
+        android:layout_marginStart="@dimen/classes_margins"
+        android:layout_marginLeft="@dimen/classes_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:text="@string/teacher"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupTextView" />
+
+    <TextView
+        android:id="@+id/teacher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/classes_margins"
+        android:layout_marginRight="@dimen/classes_margins"
+        android:layout_marginStart="@dimen/classes_smaller_margins"
+        android:layout_marginLeft="@dimen/classes_smaller_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/group" />
+
+    <TextView
+        android:id="@+id/groupTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/classes_smaller_margins"
+        android:layout_marginRight="@dimen/classes_smaller_margins"
+        android:layout_marginStart="@dimen/classes_margins"
+        android:layout_marginLeft="@dimen/classes_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:text="@string/group"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/endTextView" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/classes_margins"
+        android:layout_marginRight="@dimen/classes_margins"
+        android:layout_marginStart="@dimen/classes_smaller_margins"
+        android:layout_marginLeft="@dimen/classes_smaller_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/endTime" />
+
+    <TextView
+        android:id="@+id/classroomTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/classes_smaller_margins"
+        android:layout_marginRight="@dimen/classes_smaller_margins"
+        android:layout_marginStart="@dimen/classes_margins"
+        android:layout_marginLeft="@dimen/classes_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:text="@string/classroom"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teacher" />
+
+    <TextView
+        android:id="@+id/classroom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/classes_margins"
+        android:layout_marginRight="@dimen/classes_margins"
+        android:layout_marginStart="@dimen/classes_smaller_margins"
+        android:layout_marginLeft="@dimen/classes_smaller_margins"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/teacher" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Blabla"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/endTime" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
 
 </android.support.constraint.ConstraintLayout>
