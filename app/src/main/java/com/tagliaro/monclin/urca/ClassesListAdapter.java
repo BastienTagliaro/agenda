@@ -10,15 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class ListAdapter extends ArrayAdapter<Cours> {
+public class ClassesListAdapter extends ArrayAdapter<Cours> {
     private int resource;
 
-    public ListAdapter(@NonNull Context context, int resource) {
+    public ClassesListAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
 
-    public ListAdapter(@NonNull Context context, int resource, @NonNull List<Cours> classes) {
+    public ClassesListAdapter(@NonNull Context context, int resource, @NonNull List<Cours> classes) {
         super(context, resource, classes);
         this.resource = resource;
     }
@@ -45,11 +47,19 @@ public class ListAdapter extends ArrayAdapter<Cours> {
             }
 
             if(time != null) {
-                time.setText(c.getHeureDebut() + " - " + c.getHeureFin());
+                time.setText(String.format(getContext().getString(R.string.class_time), c.getHeureDebut(), c.getHeureFin()));
             }
 
             if(location != null) {
-                location.setText(c.getSalle());
+                Pattern classroomPattern = Pattern.compile("\\[(.*?)\\] (.*?)");
+                Matcher m = classroomPattern.matcher(c.getSalle());
+
+                if(m.matches()) {
+                    String classroom = m.group(2);
+                    classroom = classroom.substring(0,1).toUpperCase() + classroom.substring(1);
+
+                    location.setText(classroom);
+                }
             }
 
             v.setTag(c.getId());
