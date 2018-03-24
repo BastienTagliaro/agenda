@@ -33,4 +33,12 @@
             android:summary="@string/remind_me_summary" />
     </PreferenceCategory>
 
+    <Preference
+        android:selectable="false"
+        android:enabled="true"
+        android:key="last_sync"
+        android:summary="Last sync at 18:00" />
+
+    // Last sync
+
 </PreferenceScreen>
