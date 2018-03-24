@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                     boolean showRationale = shouldShowRequestPermissionRationale(permission);
 
                     if(!showRationale) {
-                        Log.d("MainActivity", "Test");
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
@@ -139,22 +138,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-        Log.d("MainActivity", "Testttt");
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     private void showRationale(int resource) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(resource).setTitle("Permission denied");
+        builder.setMessage(resource).setTitle(R.string.permission_denied);
 
-        builder.setPositiveButton("RE-TRY", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.retry_permission, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         requestPermissions();
                     }
                 });
 
-        builder.setNegativeButton("I'M SURE", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.im_sure_permission, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         finishAndRemoveTask();
