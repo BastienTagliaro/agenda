@@ -1,45 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/className"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="13dp"
-        android:fontFamily="monospace"
-        android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:text="CM INFO0403" />
+        android:weightSum="1">
+        <TextView
+            android:id="@+id/className"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/classes_margins"
+            android:layout_marginStart="@dimen/classes_margins"
+            android:layout_marginTop="@dimen/classes_margins"
+            android:fontFamily="monospace"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:layout_weight="0.8"
+            android:textSize="@dimen/classes_classname_text_size"
+            android:ellipsize="end"
+            android:maxEms="8"
+            android:maxLines="1"
+            android:text="@string/default_classname" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/classes_margins"
+            android:layout_marginEnd="@dimen/classes_margins"
+            android:layout_marginRight="@dimen/classes_margins"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:textSize="@dimen/classes_text_size"
+            android:layout_weight="0.2"
+            android:text="@string/default_time"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/className"
-        android:layout_alignBottom="@+id/className"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_toEndOf="@+id/className"
-        android:layout_toRightOf="@+id/className"
-        android:text="8h00 - 10h00"
-        android:textColor="@color/colorPrimary" />
-
-    <TextView
+        android:layout_width="wrap_content"
         android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/className"
-        android:layout_alignStart="@+id/className"
-        android:layout_below="@+id/className"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/classes_margins"
+        android:layout_marginEnd="@dimen/classes_margins"
+        android:layout_marginLeft="@dimen/classes_margins"
+        android:layout_marginStart="@dimen/classes_margins"
+        android:layout_marginRight="@dimen/classes_margins"
+        android:layout_marginBottom="@dimen/classes_margins"
         android:textColor="@color/colorPrimary"
-        android:text="Salle Amphi E 2-R05 (Moulin de la Housse (Sciences et STAPS))" />
-</RelativeLayout>
+        android:textSize="@dimen/classes_text_size"
+        android:text="@string/default_location" />
+</LinearLayout>
