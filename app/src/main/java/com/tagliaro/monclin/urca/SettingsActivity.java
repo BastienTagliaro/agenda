@@ -2,13 +2,18 @@ package com.tagliaro.monclin.urca;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 //import android.support.v7.preference.Preference;
 //import android.support.v7.preference.PreferenceFragmentCompat;
@@ -16,6 +21,10 @@ import android.view.MenuItem;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
     private final String TAG = getClass().getSimpleName();
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     SharedPreferences.OnSharedPreferenceChangeListener preferencesChanged = new
             SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -81,12 +90,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             lastSync.setSummary(String.format(getResources().getString(R.string.last_sync), lastUpdate));
         }
 
-        //        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//
-//
-//            return super.onCreateView(inflater, container, savedInstanceState);
-//        }
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            if(Build.VERSION.SDK_INT > 21) {
+                findPreference("sync_frequency").setIcon(R.drawable.ic_sync_black_24dp);
+                findPreference("ical_file").setIcon(R.drawable.ic_link_black_24dp);
+                findPreference("enable_reminders").setIcon(R.drawable.ic_notifications_black_24dp);
+                findPreference("reminders_before").setIcon(R.drawable.ic_alarm_black_24dp);
+            }
+
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
     }
 
 /*    private void checkValues() {
