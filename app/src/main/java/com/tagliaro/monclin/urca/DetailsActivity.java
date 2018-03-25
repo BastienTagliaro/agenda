@@ -3,7 +3,6 @@ package com.tagliaro.monclin.urca;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -24,10 +23,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
         Cours cours = databaseHandler.getCours(id);
-        Toolbar toolbar = findViewById(R.id.toolbar);
 
         if(cours != null) {
-            toolbar.setTitle(cours.getNomCours());
+            setTitle(cours.getNomCours());
 
             String desc = cours.getDescription();
             String[] results = desc.split("\n");
@@ -69,8 +67,6 @@ public class DetailsActivity extends AppCompatActivity {
             TextView teacher = findViewById(R.id.teacher);
             teacher.setText(classData.get("enseignant"));
         }
-
-        setSupportActionBar(toolbar);
     }
 
 }
