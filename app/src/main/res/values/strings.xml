@@ -30,4 +30,12 @@
     <string name="add_event_menu">Add event</string>
     <string name="settings_menu">Settings</string>
     <string name="last_sync">Last sync: %1$s</string>
+    <string name="add">Ajouter</string>
+    <string name="cancel">Annuler</string>
+    <string name="example_classroom">2-R06</string>
+    <string name="example_teacher">EL BAALA</string>
+    <string name="example_group">S4F3</string>
+    <string name="example_endtime">10:00</string>
+    <string name="example_starttime">08:00</string>
+    <string name="additional_notes">Additional notes</string>
 </resources>
