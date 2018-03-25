@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="interval">15</string-array>
+    <string-array name="interval_name">
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>45 min</item>
+        <item>1 heure</item>
+        <item>4 heures</item>
+        <item>8 heures</item>
+        <item>16 heures</item>
+        <item>24 heures</item>
+    </string-array>
+    <string-array name="interval_values">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+    </string-array>
+    <string-array name="notifications_time">15</string-array>
+    <string-array name="reminders_before_name">
+        <item>5 min avant</item>
+        <item>15 min avant</item>
+        <item>30 min avant</item>
+        <item>45 min avant</item>
+        <item>60 min avant</item>
+    </string-array>
+    <string-array name="reminders_before_values">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+        <item>240</item>
+        <item>480</item>
+        <item>960</item>
+        <item>1440</item>
+    </string-array>
+</resources>
