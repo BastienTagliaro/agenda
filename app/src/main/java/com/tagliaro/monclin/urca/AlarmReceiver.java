@@ -53,7 +53,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             SimpleDateFormat completeDate = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.FRANCE);
             String today = day.format(now);
             DatabaseHandler databaseHandler = new DatabaseHandler(context);
-            List<Cours> classList = databaseHandler.getCours("23-03-2018"); // replace with "today"
+            List<Cours> classList = databaseHandler.getCours(today);
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             int remindersBeforeSeconds = (Integer.parseInt(sharedPreferences.getString("reminders_before", "15"))) * 60;
@@ -75,19 +75,18 @@ public class AlarmReceiver extends BroadcastReceiver {
                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
                         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL)
-                                .setSmallIcon(R.drawable.ic_info_black_24dp)
+                                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                                 .setContentTitle(c.getNomCours())
                                 .setContentText(c.getDescription())
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT); // add opening activity on click
                         notificationManager.notify(createID(), mBuilder.build()); // set static ID I guess? Or find a way to only display this notification once
                     }
 
-                    Log.d("AlarmReceiver", "Now : " + now.getTime()/1000 + " ; Date : " + date.getTime()/1000);
+                    Log.d("AlarmReceiver", "Now : " + now.toString() + " ; Date : " + date.toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 
