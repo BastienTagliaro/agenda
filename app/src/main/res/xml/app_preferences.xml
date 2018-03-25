@@ -38,7 +38,7 @@
         android:selectable="false"
         android:enabled="true"
         android:key="last_sync"
-        android:summary="Last sync at 18:00" />
+        android:summary="" />
 
     // Last sync
 
