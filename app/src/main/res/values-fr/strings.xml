@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">URCA</string>
+    <string name="title_activity_details">Détails</string>
+    <string name="title_activity_settings">Paramètres</string>
+    <string name="default_location">Salle 2-R06</string>
+    <string name="startTime">Début</string>
+    <string name="endTime">Fin</string>
+    <string name="teacher">Enseignant</string>
+    <string name="group">Groupe</string>
+    <string name="classroom">Salle</string>
+    <string name="permission_storage_required">La permission d\'écriture vers le stockage externe est nécessaire pour télécharger les données du calendrier. Cette application ne peut fonctionner sans cette permission.</string>
+    <string name="general_settings">Paramètres généraux</string>
+    <string name="sync_frequency">Fréquence de synchronisation</string>
+    <string name="sync_frequency_summary">Choisissez entre plusieurs fréquences de synchronisation</string>
+    <string name="ical_file">Lien du fichier .ical</string>
+    <string name="enable_reminders">Activer les rappels</string>
+    <string name="remind_me">Notifiez-moi&#8230;</string>
+    <string name="remind_me_summary">Choisissez quand l\'application vous notifie à propos d\'un évènement</string>
+    <string name="notifications">Notifications</string>
+    <string name="retry_permission">D\'ACCORD</string>
+    <string name="im_sure_permission">JE SUIS SÛR</string>
+    <string name="permission_denied">Permission refusée</string>
+    <string name="add_event_menu">Ajouter évènement</string>
+    <string name="settings_menu">Paramètres</string>
+    <string name="last_sync">Dernière synchronisation : %1$s</string>
+    <string name="add">Ajouter</string>
+    <string name="cancel">Annuler</string>
+    <string name="additional_notes">Notes additionnelles</string>
+    <string name="new_event">Ajouter un nouvel évènement</string>
+</resources>
