@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -50,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         calendarView = findViewById(R.id.calendarView);
         classesList = findViewById(R.id.listView);
+
+        if(Build.VERSION.SDK_INT <= 22) {
+            calendarView.setLayoutParams(new ConstraintLayout.LayoutParams(Resources.getSystem().getDisplayMetrics().widthPixels, 320));
+        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions();
@@ -86,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         }
 
-        // Call SyncService here
-        Intent syncIntent = new Intent(this, SyncService.class);
-        SyncService.enqueueWork(this, syncIntent);
+//        // Call SyncService here as
+//        Intent syncIntent = new Intent(this, SyncService.class);
+//        SyncService.enqueueWork(this, syncIntent);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
         currentDate = dateFormat.format(calendarView.getDate());
