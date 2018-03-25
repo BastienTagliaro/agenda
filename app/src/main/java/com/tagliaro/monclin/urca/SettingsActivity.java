@@ -3,16 +3,18 @@ package com.tagliaro.monclin.urca;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.MenuItem;
 
-public class SettingsActivity extends AppCompatActivity {
+//import android.support.v7.preference.Preference;
+//import android.support.v7.preference.PreferenceFragmentCompat;
+//import android.support.v7.preference.PreferenceManager;
+
+public class SettingsActivity extends AppCompatPreferenceActivity {
     private final String TAG = getClass().getSimpleName();
 
     SharedPreferences.OnSharedPreferenceChangeListener preferencesChanged = new
@@ -31,22 +33,35 @@ public class SettingsActivity extends AppCompatActivity {
                         Intent syncIntent = new Intent(getApplicationContext(), SyncService.class);
                         SyncService.enqueueWork(getApplicationContext(), syncIntent);
                     }
+                    if(key.equals("lastUpdate")) {
+
+                    }
                 }
             };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         SettingsFragment settingsFragment = SettingsFragment.newInstance(sharedPreferences.getString("lastUpdate", null));
 
-        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, settingsFragment).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, settingsFragment).commit();
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(preferencesChanged);
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static class SettingsFragment extends PreferenceFragment {
         public static SettingsFragment newInstance(String arg) {
             SettingsFragment sf = new SettingsFragment();
             Bundle args = new Bundle();
@@ -56,20 +71,22 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.app_preferences);
+
             String lastUpdate = getArguments().getString("lastUpdate");
             Preference lastSync = findPreference("last_sync");
 
             lastSync.setSummary(String.format(getResources().getString(R.string.last_sync), lastUpdate));
-
-            return super.onCreateView(inflater, container, savedInstanceState);
         }
 
-        @Override
-        public void onCreatePreferences(Bundle bundle, String s) {
-            // Load the Preferences from the XML file
-            addPreferencesFromResource(R.xml.app_preferences);
-        }
+        //        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//
+//
+//            return super.onCreateView(inflater, container, savedInstanceState);
+//        }
     }
 
 /*    private void checkValues() {
