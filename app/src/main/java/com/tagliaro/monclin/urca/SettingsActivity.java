@@ -42,9 +42,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         Intent syncIntent = new Intent(getApplicationContext(), SyncService.class);
                         SyncService.enqueueWork(getApplicationContext(), syncIntent);
                     }
-                    if(key.equals("lastUpdate")) {
-
-                    }
                 }
             };
 
