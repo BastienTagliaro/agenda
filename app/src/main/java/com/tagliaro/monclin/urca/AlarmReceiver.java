@@ -2,6 +2,7 @@ package com.tagliaro.monclin.urca;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,7 +61,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             int limitMax = remindersBeforeSeconds + 60;
             int limitMin = remindersBeforeSeconds - 60;
 
-//            long testTime = 1521787465;
+//            long testTime = 1522051200;
 
             for(Cours c : classList) {
                 try {
@@ -72,14 +73,21 @@ public class AlarmReceiver extends BroadcastReceiver {
                     if(limitMax - difference >= 0 && difference - limitMin >= 0) {
                         Log.d("AlarmReceiver", "Notify!");
 
+                        Intent intentActivity = new Intent(context, DetailsActivity.class);
+                        intentActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intentActivity.putExtra("id", c.getId());
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 20, intentActivity, 0);
+
                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
                         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL)
                                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                                 .setContentTitle(c.getNomCours())
-                                .setContentText(c.getDescription())
+                                .setContentText(c.getSalle())
+                                .setContentIntent(pendingIntent)
+                                .setAutoCancel(true)
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT); // add opening activity on click
-                        notificationManager.notify(createID(), mBuilder.build()); // set static ID I guess? Or find a way to only display this notification once
+                        notificationManager.notify((int) c.getId(), mBuilder.build()); // set static ID I guess? Or find a way to only display this notification once
                     }
 
                     Log.d("AlarmReceiver", "Now : " + now.toString() + " ; Date : " + date.toString());
