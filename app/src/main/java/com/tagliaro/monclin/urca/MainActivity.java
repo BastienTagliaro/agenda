@@ -92,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         }
 
+        Intent intent = new Intent();
+        intent.setClass(this, AlarmSetter.class);
+        intent.setAction("com.tagliaro.monclin.urca.SET_NOTIFY");
+        sendBroadcast(intent);
+
 //        // Call SyncService here as
 //        Intent syncIntent = new Intent(this, SyncService.class);
 //        SyncService.enqueueWork(this, syncIntent);
