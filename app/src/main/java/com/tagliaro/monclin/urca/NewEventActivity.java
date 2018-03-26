@@ -10,10 +10,5 @@ public class NewEventActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newevent);
-
-        Intent intent = new Intent();
-        intent.setClass(getApplicationContext(), AlarmSetter.class);
-        intent.setAction("com.tagliaro.monclin.urca.SET_NOTIFY");
-        sendBroadcast(intent);
     }
 }
