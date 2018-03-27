@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,31 +24,37 @@
         </activity>
 
         <service
-            android:name=".SyncService"
+            android:name=".background.SyncService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name=".background.NotifyService" />
 
-        <receiver android:name=".AlarmReceiver">
+        <receiver android:name=".background.NotifySetter">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.tagliaro.monclin.urca.SET_REMINDER" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".background.AlarmReceiver">
             <intent-filter>
                 <action android:name="com.tagliaro.monclin.urca.SYNC" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmSetter">
+        <receiver android:name=".background.SyncSetter">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.tagliaro.monclin.urca_SET_SYNC" />
-                <action android:name="com.tagliaro.monclin.urca.SET_REMINDER" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".DetailsActivity"
+            android:name=".ui.DetailsActivity"
             android:label="@string/title_activity_details" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity
-            android:name=".NewEventActivity"
-            android:label="@string/new_event" />
+        <!--<activity-->
+            <!--android:name=".NewEventActivity"-->
+            <!--android:label="@string/new_event" />-->
     </application>
 
 </manifest>
