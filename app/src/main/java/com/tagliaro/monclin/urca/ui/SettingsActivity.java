@@ -1,4 +1,4 @@
-package com.tagliaro.monclin.urca;
+package com.tagliaro.monclin.urca.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +14,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.tagliaro.monclin.urca.background.SyncSetter;
+import com.tagliaro.monclin.urca.R;
+import com.tagliaro.monclin.urca.background.SyncService;
 
 //import android.support.v7.preference.Preference;
 //import android.support.v7.preference.PreferenceFragmentCompat;
@@ -33,7 +37,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     Log.d(TAG, "Key : " + key);
                     if(key.equals("sync_frequency")) {
                         Intent intent = new Intent();
-                        intent.setClass(getApplicationContext(), AlarmSetter.class);
+                        intent.setClass(getApplicationContext(), SyncSetter.class);
                         intent.setAction("com.tagliaro.monclin.urca.SET_SYNC");
                         sendBroadcast(intent);
                     }
@@ -85,6 +89,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Preference lastSync = findPreference("last_sync");
 
             lastSync.setSummary(String.format(getResources().getString(R.string.last_sync), lastUpdate));
+
+            Preference btn = findPreference("force_sync_btn");
+            btn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Log.d("SettingsFragment", "Sending intent as user forced sync");
+                    Intent syncIntent = new Intent(getActivity().getApplicationContext(), SyncService.class);
+                    SyncService.enqueueWork(getActivity().getApplicationContext(), syncIntent);
+
+                    return true;
+                }
+            });
         }
 
         @Override
@@ -94,6 +110,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 findPreference("ical_file").setIcon(R.drawable.ic_link_black_24dp);
                 findPreference("enable_reminders").setIcon(R.drawable.ic_notifications_black_24dp);
                 findPreference("reminders_before").setIcon(R.drawable.ic_alarm_black_24dp);
+                findPreference("force_sync_btn").setIcon(R.drawable.ic_force_sync_black_24dp);
             }
 
             return super.onCreateView(inflater, container, savedInstanceState);

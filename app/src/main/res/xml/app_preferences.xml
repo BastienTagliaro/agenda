@@ -17,6 +17,10 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:title="@string/ical_file" />
+        <Preference
+            android:title="@string/force_sync"
+            android:key="force_sync_btn"
+            android:summary="@string/force_sync_summary"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -26,6 +30,7 @@
             android:title="@string/enable_reminders"
             android:defaultValue="true" />
         <ListPreference
+            android:dependency="enable_reminders"
             android:defaultValue="15"
             android:entries="@array/reminders_before_name"
             android:entryValues="@array/reminders_before_values"
