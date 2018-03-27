@@ -30,4 +30,5 @@
     <string name="new_event">Ajouter un nouvel évènement</string>
     <string name="force_sync">Forcer la synchronisation</string>
     <string name="force_sync_summary">Si vous voulez rafraîchir les évènements immédiatement</string>
+    <string name="never_synced">Jamais synchronisé</string>
 </resources>

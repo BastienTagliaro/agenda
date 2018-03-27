@@ -40,4 +40,5 @@
     <string name="additional_notes">Additional notes</string>
     <string name="force_sync">Force sync</string>
     <string name="force_sync_summary">If you want the events to be synchronized right away</string>
+    <string name="never_synced">Never synced</string>
 </resources>
