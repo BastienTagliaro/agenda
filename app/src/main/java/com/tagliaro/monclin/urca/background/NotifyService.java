@@ -64,6 +64,7 @@ public class NotifyService extends Service {
         Log.d(TAG, classesIds.length + " event(s) to notify");
 
         for(int i = 0; i < classesIds.length; ++i) {
+//            Toast.makeText(getApplicationContext(), "Started runnable with time left : " + timeLeft[i], Toast.LENGTH_LONG).show();
             (new Handler()).postDelayed(new NotifyTask(classesIds[i]) {
                 @Override
                 public void run() {
