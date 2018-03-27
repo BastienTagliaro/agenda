@@ -19,10 +19,6 @@ import com.tagliaro.monclin.urca.background.SyncSetter;
 import com.tagliaro.monclin.urca.R;
 import com.tagliaro.monclin.urca.background.SyncService;
 
-//import android.support.v7.preference.Preference;
-//import android.support.v7.preference.PreferenceFragmentCompat;
-//import android.support.v7.preference.PreferenceManager;
-
 public class SettingsActivity extends AppCompatPreferenceActivity {
     private final String TAG = getClass().getSimpleName();
 
@@ -88,7 +84,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             String lastUpdate = getArguments().getString("lastUpdate");
             Preference lastSync = findPreference("last_sync");
 
-            lastSync.setSummary(String.format(getResources().getString(R.string.last_sync), lastUpdate));
+            if(lastUpdate != null) {
+                lastSync.setSummary(String.format(getResources().getString(R.string.last_sync), lastUpdate));
+            }
+            else {
+                lastSync.setSummary(getResources().getString(R.string.never_synced));
+            }
 
             Preference btn = findPreference("force_sync_btn");
             btn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -116,21 +117,4 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onCreateView(inflater, container, savedInstanceState);
         }
     }
-
-/*    private void checkValues() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-        String syncFrequency = preferences.getString("sync_frequency", "30");
-        String url = preferences.getString("ical_file", null);
-        boolean enableNotifications = preferences.getBoolean("enable_reminders", true);
-        String remindBefore = preferences.getString("reminders_before", "15");
-
-        String msg = "Cur values: ";
-        msg += "\n frequency = " + syncFrequency;
-        msg += "\n url = " + url;
-        msg += "\n enableNotifications = " + enableNotifications;
-        msg += "\n remindBefore = " + remindBefore;
-
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-    }*/
 }
