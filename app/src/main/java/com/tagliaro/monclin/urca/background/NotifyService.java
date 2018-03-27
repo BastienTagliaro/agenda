@@ -81,7 +81,7 @@ public class NotifyService extends Service {
 
         Intent intentActivity = new Intent(getApplicationContext(), DetailsActivity.class);
         intentActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intentActivity.putExtra("id", c.getId());
+        intentActivity.putExtra("id", classId);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 20, intentActivity, 0);
 
@@ -95,7 +95,7 @@ public class NotifyService extends Service {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        notificationManager.notify((int) c.getId(), mBuilder.build());
+        notificationManager.notify((int) classId, mBuilder.build());
     }
 
     @Override
