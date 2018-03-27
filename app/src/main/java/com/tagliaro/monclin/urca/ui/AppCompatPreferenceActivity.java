@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tagliaro.monclin.urca;
+package com.tagliaro.monclin.urca.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
