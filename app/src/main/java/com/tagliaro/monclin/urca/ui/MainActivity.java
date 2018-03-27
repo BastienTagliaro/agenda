@@ -46,6 +46,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
     private String currentDate;
+    private BroadcastReceiver updateReceiver;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
     CalendarView calendarView;
     ListView classesList;
     private final int STORAGE_PERMISSION_CODE = 101;
@@ -95,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         intent1.setAction("com.tagliaro.monclin.urca.SET_NOTIFY");
         sendBroadcast(intent1);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
         currentDate = dateFormat.format(calendarView.getDate());
 
         if(createFolder(getPackageName())) {
@@ -120,24 +121,26 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            updateReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    Log.d(TAG,"Received update broadcast, refreshing");
+
+                    setListItems(context, R.layout.classes_view, currentDate);
+                }
+            };
         }
     }
-
-    private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG,"Received update broadcast, refreshing");
-
-            setListItems(context, R.layout.classes_view, currentDate);
-        }
-    };
 
     @Override
     protected void onResume() {
         super.onResume();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver, new IntentFilter("urca.UPDATE_CALENDAR"));
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("urca.UPDATE_CALENDAR"));
+
+        currentDate = dateFormat.format(calendarView.getDate());
+        setListItems(getApplicationContext(), R.layout.classes_view, currentDate);
     }
 
     @Override
