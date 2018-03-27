@@ -1,4 +1,4 @@
-package com.tagliaro.monclin.urca;
+package com.tagliaro.monclin.urca.background;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.tagliaro.monclin.urca.utils.Classes;
+import com.tagliaro.monclin.urca.utils.DatabaseHandler;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
@@ -39,7 +42,7 @@ public class SyncService extends JobIntentService {
     private static final int JOB_ID = 1000;
     private final String TAG = getClass().getSimpleName();
 
-    static void enqueueWork(Context context, Intent work) {
+    public static void enqueueWork(Context context, Intent work) {
         enqueueWork(context, SyncService.class, JOB_ID, work);
     }
 
@@ -89,15 +92,15 @@ public class SyncService extends JobIntentService {
                     databaseHandler.doTable();
 
                     Pattern date = Pattern.compile("([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2})([0-9]{2})");
-                    List<Cours> cours = new ArrayList<>();
+                    List<Classes> cours = new ArrayList<>();
                     int index = 0;
 
                     for(Iterator i = calendar.getComponents().iterator(); i.hasNext(); index++) {
                         Component component = (Component) i.next();
-                        cours.add(new Cours());
+                        cours.add(new Classes());
 
                         for(Iterator j = component.getProperties().iterator(); j.hasNext();) {
-                            Cours currentCours = cours.get(index);
+                            Classes currentClasses = cours.get(index);
                             Property property = (Property) j.next();
 
                             switch(property.getName()) {
@@ -112,32 +115,32 @@ public class SyncService extends JobIntentService {
                                         String hours = m.group(4);
                                         String minutes = m.group(5);
 
-                                        currentCours.setDate(day + "-" + month + "-" + year);
+                                        currentClasses.setDate(day + "-" + month + "-" + year);
 
                                         if(property.getName().equals("DTSTART"))
-                                            currentCours.setHeureDebut(hours + ":" + minutes);
+                                            currentClasses.setStartTime(hours + ":" + minutes);
                                         else
-                                            currentCours.setHeureFin(hours + ":" + minutes);
+                                            currentClasses.setEndTime(hours + ":" + minutes);
                                     }
                                     break;
 
                                 case "SUMMARY":
-                                    currentCours.setNomCours(property.getValue());
+                                    currentClasses.setClassname(property.getValue());
                                     break;
                                 case "DESCRIPTION":
-                                    currentCours.setDescription(property.getValue());
+                                    currentClasses.setDescription(property.getValue());
                                     break;
                                 case "LOCATION":
-                                    currentCours.setSalle(property.getValue());
+                                    currentClasses.setClassroom(property.getValue());
                                     break;
                             }
                         }
                     }
 
                     for(int i = 0; i < cours.size(); ++i) {
-                        Cours currentCours = cours.get(i);
-                        databaseHandler.ajouter(new Cours(currentCours.getNomCours(), currentCours.getSalle(), currentCours.getDescription(),
-                                currentCours.getDate(), currentCours.getHeureDebut(), currentCours.getHeureFin()));
+                        Classes currentClasses = cours.get(i);
+                        databaseHandler.add(new Classes(currentClasses.getClassname(), currentClasses.getClassroom(), currentClasses.getDescription(),
+                                currentClasses.getDate(), currentClasses.getStartTime(), currentClasses.getEndTime()));
                     }
 
 

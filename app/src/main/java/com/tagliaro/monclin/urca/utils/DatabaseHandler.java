@@ -1,4 +1,4 @@
-package com.tagliaro.monclin.urca;
+package com.tagliaro.monclin.urca.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,21 +13,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_NAME = "CoursDB";
+    private static final String DATABASE_NAME = "ClassesDB";
 
-    private static final String NAME_TABLE = "cours";
+    private static final String NAME_TABLE = "classes";
     private static final String KEY = "id";
-    private static final String NOMCOURS = "nomCours";
-    private static final String SALLE = "salle";
+    private static final String CLASS_NAME = "className";
+    private static final String CLASSROOM = "classroom";
     private static final String DESCRIPTION = "description";
     private static final String DATE = "date";
-    private static final String HEUREDEBUT = "heureDebut";
-    private static final String HEUREFIN = "heureFin";
+    private static final String START_TIME = "startTime";
+    private static final String END_TIME = "endTime";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + NAME_TABLE + " (" + KEY +
-            " INTEGER PRIMARY KEY AUTOINCREMENT, " + NOMCOURS
-            + " TEXT, " + SALLE + " TEXT," + DESCRIPTION + " TEXT, " + DATE + " TEXT, "
-            + HEUREDEBUT + " TEXT, " + HEUREFIN + " TEXT);";
+            " INTEGER PRIMARY KEY AUTOINCREMENT, " + CLASS_NAME
+            + " TEXT, " + CLASSROOM + " TEXT," + DESCRIPTION + " TEXT, " + DATE + " TEXT, "
+            + START_TIME + " TEXT, " + END_TIME + " TEXT);";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + NAME_TABLE + ";";
 
@@ -75,66 +75,66 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return mDb;
     }
 
-    public void ajouter(Cours c) {
+    public void add(Classes c) {
         ContentValues value = new ContentValues();
-        value.put(NOMCOURS, c.getNomCours());
-        value.put(SALLE, c.getSalle());
+        value.put(CLASS_NAME, c.getClassname());
+        value.put(CLASSROOM, c.getClassroom());
         value.put(DESCRIPTION, c.getDescription());
         value.put(DATE, c.getDate());
-        value.put(HEUREDEBUT, c.getHeureDebut());
-        value.put(HEUREFIN, c.getHeureFin());
+        value.put(START_TIME, c.getStartTime());
+        value.put(END_TIME, c.getEndTime());
 
         SQLiteDatabase db = this.open();
         db.insert(NAME_TABLE, null, value);
         db.close();
     }
 
-    public List<Cours> getCours(String date) {
-        List<Cours> coursList = new ArrayList<>();
+    public List<Classes> getClass(String date) {
+        List<Classes> classesList = new ArrayList<>();
         SQLiteDatabase db = this.open();
 
-        Cursor cursor = db.query(NAME_TABLE, new String[] { KEY, NOMCOURS, SALLE, DESCRIPTION, DATE,
-        HEUREDEBUT, HEUREFIN}, DATE + "=?", new String[] {date }, null, null, HEUREDEBUT);
+        Cursor cursor = db.query(NAME_TABLE, new String[] { KEY, CLASS_NAME, CLASSROOM, DESCRIPTION, DATE,
+                START_TIME, END_TIME}, DATE + "=?", new String[] {date }, null, null, START_TIME);
 
         if (cursor.moveToFirst()) {
             do {
-                Cours cours = new Cours(Integer.parseInt(cursor.getString(0)), cursor.getString(1)
+                Classes classes = new Classes(Integer.parseInt(cursor.getString(0)), cursor.getString(1)
                         , cursor.getString(2), cursor.getString(3), cursor.getString(4),
                         cursor.getString(5), cursor.getString(6));
-                coursList.add(cours);
+                classesList.add(classes);
             } while (cursor.moveToNext());
 
         }
         cursor.close();
         db.close();
-        return coursList;
+        return classesList;
     }
 
-    public Cours getCours(Long id) {
+    public Classes getClass(Long id) {
         SQLiteDatabase db = this.open();
-        Cours cours = null;
+        Classes classes = null;
 
         Cursor cursor = db.query(NAME_TABLE,
-                new String[] { KEY, NOMCOURS, SALLE, DESCRIPTION, DATE, HEUREDEBUT, HEUREFIN },
+                new String[] { KEY, CLASS_NAME, CLASSROOM, DESCRIPTION, DATE, START_TIME, END_TIME},
                 KEY + "=?", new String[] { Long.toString(id) },
                 null,
                 null,
                 null);
 
         if (cursor.moveToFirst()) {
-            cours = new Cours(Integer.parseInt(cursor.getString(0)), cursor.getString(1)
+            classes = new Classes(Integer.parseInt(cursor.getString(0)), cursor.getString(1)
                         , cursor.getString(2), cursor.getString(3), cursor.getString(4),
                         cursor.getString(5), cursor.getString(6));
         }
 
         cursor.close();
         db.close();
-        return cours;
+        return classes;
     }
 
     /*
-    public List<Cours> getAllCours() {
-        List<Cours> coursList = new ArrayList<>();
+    public List<Classes> getAllCours() {
+        List<Classes> coursList = new ArrayList<>();
 
         String selectQuery = "SELECT  * FROM " + NAME_TABLE;
 
@@ -143,14 +143,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Cours cours = new Cours();
+                Classes cours = new Classes();
                 cours.setId(Integer.parseInt(cursor.getString(0)));
-                cours.setNomCours(cursor.getString(1));
-                cours.setSalle(cursor.getString(2));
+                cours.setClassname(cursor.getString(1));
+                cours.setClassroom(cursor.getString(2));
                 cours.setDescription(cursor.getString(3));
                 cours.setDate(cursor.getString(4));
-                cours.setHeureDebut(cursor.getString(5));
-                cours.setHeureFin(cursor.getString(6));
+                cours.setStartTime(cursor.getString(5));
+                cours.setEndTime(cursor.getString(6));
 
                 coursList.add(cours);
             } while (cursor.moveToNext());
@@ -171,22 +171,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
-    public void updateCours(Cours c) {
+    public void updateCours(Classes c) {
         SQLiteDatabase db = this.open();
 
         ContentValues values = new ContentValues();
-        values.put(NOMCOURS, c.getNomCours());
-        values.put(SALLE, c.getSalle());
+        values.put(CLASS_NAME, c.getClassname());
+        values.put(CLASSROOM, c.getClassroom());
         values.put(DESCRIPTION, c.getDescription());
         values.put(DATE, c.getDate());
-        values.put(HEUREDEBUT, c.getHeureDebut());
-        values.put(HEUREFIN, c.getHeureFin());
+        values.put(START_TIME, c.getStartTime());
+        values.put(END_TIME, c.getEndTime());
 
         db.update(NAME_TABLE, values, KEY + " = ?", new String[] {String.valueOf(c.getId())});
         db.close();
     }
 
-    public void deleteCours(Cours c) {
+    public void deleteCours(Classes c) {
         SQLiteDatabase db = this.open();
 
         db.delete(NAME_TABLE, KEY + " = ?",

@@ -1,10 +1,16 @@
-package com.tagliaro.monclin.urca;
+package com.tagliaro.monclin.urca.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.tagliaro.monclin.urca.R;
+import com.tagliaro.monclin.urca.utils.Classes;
+import com.tagliaro.monclin.urca.utils.DatabaseHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,16 +24,21 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
         Long id = intent.getLongExtra("id", 0);
 
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
-        Cours cours = databaseHandler.getCours(id);
+        Classes classes = databaseHandler.getClass(id);
 
-        if(cours != null) {
-            setTitle(cours.getNomCours());
+        if(classes != null) {
+            setTitle(classes.getClassname());
 
-            String desc = cours.getDescription();
+            String desc = classes.getDescription();
             String[] results = desc.split("\n");
 
             Pattern descriptionPattern = Pattern.compile("\\[(.*?)\\] (.*?)");
@@ -53,10 +64,10 @@ public class DetailsActivity extends AppCompatActivity {
             }
 
             TextView startTime = findViewById(R.id.startTime);
-            startTime.setText(cours.getHeureDebut());
+            startTime.setText(classes.getStartTime());
 
             TextView endTime = findViewById(R.id.endTime);
-            endTime.setText(cours.getHeureFin());
+            endTime.setText(classes.getEndTime());
 
             TextView classroom = findViewById(R.id.classroom);
             classroom.setText(classData.get("salle"));
@@ -69,4 +80,12 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

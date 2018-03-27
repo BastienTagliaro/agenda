@@ -1,4 +1,4 @@
-package com.tagliaro.monclin.urca;
+package com.tagliaro.monclin.urca.ui;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -32,6 +32,12 @@ import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
+import com.tagliaro.monclin.urca.R;
+import com.tagliaro.monclin.urca.background.NotifySetter;
+import com.tagliaro.monclin.urca.background.SyncSetter;
+import com.tagliaro.monclin.urca.utils.Classes;
+import com.tagliaro.monclin.urca.utils.DatabaseHandler;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -39,7 +45,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
-    private BroadcastReceiver updateReceiver;
     private String currentDate;
     CalendarView calendarView;
     ListView classesList;
@@ -79,27 +84,16 @@ public class MainActivity extends AppCompatActivity {
     private void process() {
         Log.d(TAG, "process() called!");
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
-        if (isFirstRun) {
-            // This is just to make sure the AlarmSetter is always running the Alarm
-            Intent intent = new Intent();
-            intent.setClass(this, AlarmSetter.class);
-            intent.setAction("com.tagliaro.monclin.urca_SET_SYNC");
-            sendBroadcast(intent);
-
-            SharedPreferences.Editor editor = wmbPreference.edit();
-            editor.putBoolean("FIRSTRUN", false);
-            editor.apply();
-        }
 
         Intent intent = new Intent();
-        intent.setClass(this, AlarmSetter.class);
-        intent.setAction("com.tagliaro.monclin.urca.SET_NOTIFY");
+        intent.setClass(this, SyncSetter.class);
+        intent.setAction("com.tagliaro.monclin.urca.SET_SYNC");
         sendBroadcast(intent);
 
-//        // Call SyncService here as
-//        Intent syncIntent = new Intent(this, SyncService.class);
-//        SyncService.enqueueWork(this, syncIntent);
+        Intent intent1 = new Intent();
+        intent1.setClass(this, NotifySetter.class);
+        intent1.setAction("com.tagliaro.monclin.urca.SET_NOTIFY");
+        sendBroadcast(intent1);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
         currentDate = dateFormat.format(calendarView.getDate());
@@ -126,23 +120,24 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
-            updateReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    Log.d(TAG,"Received update broadcast, refreshing");
-
-                    setListItems(context, R.layout.classes_view, currentDate);
-                }
-            };
         }
     }
+
+    private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG,"Received update broadcast, refreshing");
+
+            setListItems(context, R.layout.classes_view, currentDate);
+        }
+    };
 
     @Override
     protected void onResume() {
         super.onResume();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver, new IntentFilter("urca.UPDATE_CALENDAR"));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("urca.UPDATE_CALENDAR"));
     }
 
     @Override
@@ -211,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHandler databaseHandler = new DatabaseHandler(context);
         ListView classesList = findViewById(R.id.listView);
 
-        List<Cours> cours = databaseHandler.getCours(date);
+        List<Classes> cours = databaseHandler.getClass(date);
         ClassesListAdapter customAdapter = new ClassesListAdapter(getApplicationContext(), resource, cours);
         classesList.setAdapter(customAdapter);
     }
@@ -231,10 +226,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent pref = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(pref);
                 return true;
-            case R.id.menu_add:
-                Intent add = new Intent(getApplicationContext(), NewEventActivity.class);
-                startActivity(add);
-                return true;
+//            case R.id.menu_add:
+//                Intent add = new Intent(getApplicationContext(), NewEventActivity.class);
+//                startActivity(add);
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
