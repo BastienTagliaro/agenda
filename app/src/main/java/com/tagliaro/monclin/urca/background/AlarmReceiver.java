@@ -42,6 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             SimpleDateFormat completeDate = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.FRANCE);
             String today = day.format(now);
             DatabaseHandler databaseHandler = new DatabaseHandler(context);
+
             List<Classes> classList = databaseHandler.getClass(today);
 
             long remindersBeforeSeconds = (Long.parseLong(sharedPreferences.getString("reminders_before", "15"))) * 60;
