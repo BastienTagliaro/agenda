@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">URCA</string>
+    <string name="app_name">Agenda URCA</string>
     <string name="title_activity_details">Détails</string>
     <string name="title_activity_settings">Paramètres</string>
     <string name="default_location">Salle 2-R06</string>
@@ -28,4 +28,6 @@
     <string name="cancel">Annuler</string>
     <string name="additional_notes">Notes additionnelles</string>
     <string name="new_event">Ajouter un nouvel évènement</string>
+    <string name="force_sync">Forcer la synchronisation</string>
+    <string name="force_sync_summary">Si vous voulez rafraîchir les évènements immédiatement</string>
 </resources>

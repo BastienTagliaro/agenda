@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">URCA</string>
+    <string name="app_name">Agenda URCA</string>
     <string name="title_activity_details">Details</string>
     <string name="title_activity_settings">Settings</string>
     <string name="new_event">Add new Event</string>
@@ -38,4 +38,6 @@
     <string name="example_endtime" translatable="false">10:00</string>
     <string name="example_starttime" translatable="false">08:00</string>
     <string name="additional_notes">Additional notes</string>
+    <string name="force_sync">Force sync</string>
+    <string name="force_sync_summary">If you want the events to be synchronized right away</string>
 </resources>
