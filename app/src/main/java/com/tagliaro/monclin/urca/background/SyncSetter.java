@@ -26,6 +26,7 @@ public class SyncSetter extends BroadcastReceiver {
         if(action != null && action.equals("com.tagliaro.monclin.urca.SET_SYNC")) {
             Log.d(TAG, "Sending SYNC broadcast");
             Integer intervalInMinutes = Integer.parseInt(sharedPreferences.getString("sync_frequency", "30"));
+            Log.d(TAG, "Sync frequency is " + intervalInMinutes);
 
             Intent alarmIntent = new Intent(context, AlarmReceiver.class);
             alarmIntent.setType("SYNC");
