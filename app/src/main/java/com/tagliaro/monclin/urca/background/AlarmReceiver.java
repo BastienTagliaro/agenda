@@ -43,7 +43,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             String today = day.format(now);
             DatabaseHandler databaseHandler = new DatabaseHandler(context);
 
+//            databaseHandler.add(new Classes("Test", "2-R06", "desc", "27-03-2018", "20:17", "20:00"));
             List<Classes> classList = databaseHandler.getClass(today);
+//            List<Classes> classList = new ArrayList<>();
 
             long remindersBeforeSeconds = (Long.parseLong(sharedPreferences.getString("reminders_before", "15"))) * 60;
             long secondsBeforeRunnable = 5*60; // If we're 5 min away from the remindersBeforeSeconds we start service with a runnable
@@ -51,9 +53,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             for(Classes c : classList) {
                 try {
                     Date date = completeDate.parse(c.getDate() + " " + c.getStartTime());
-                    long difference = Math.abs(now.getTime() - date.getTime())/1000;
+                    long difference = (date.getTime() - now.getTime())/1000;
 
-                    if(difference < remindersBeforeSeconds + secondsBeforeRunnable && difference > remindersBeforeSeconds) {
+                    if(difference != 0 && (difference < remindersBeforeSeconds + secondsBeforeRunnable && difference > remindersBeforeSeconds)) {
                         classesToNotify.put(c.getId(), difference - remindersBeforeSeconds);
                     }
                 } catch (ParseException e) {
@@ -70,7 +72,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
 
             if(classesToNotify.size() > 0) {
-                Log.d(TAG, "Something to notify");
+                Log.d(TAG, classesToNotify.size() + " event(s) to notify");
 
                 Intent notifyIntent = new Intent(context, NotifyService.class);
                 notifyIntent.setAction("com.tagliaro.monclin.urca.NOTIFY");
