@@ -19,6 +19,8 @@ import com.tagliaro.monclin.urca.ui.DetailsActivity;
 import com.tagliaro.monclin.urca.utils.Classes;
 import com.tagliaro.monclin.urca.utils.DatabaseHandler;
 
+import java.util.Arrays;
+
 public class NotifyService extends Service {
     public static final String PRIMARY_CHANNEL = "default";
     private final String TAG = getClass().getSimpleName();
@@ -61,9 +63,10 @@ public class NotifyService extends Service {
             public void run() {}
         }
 
-        Log.d(TAG, classesIds.length + " event(s) to notify");
+        Log.d(TAG, Arrays.toString(classesIds));
 
         for(int i = 0; i < classesIds.length; ++i) {
+            Log.d(TAG, "Event " + classesIds[i] + " in " + timeLeft[i] + " seconds");
 //            Toast.makeText(getApplicationContext(), "Started runnable with time left : " + timeLeft[i], Toast.LENGTH_LONG).show();
             (new Handler()).postDelayed(new NotifyTask(classesIds[i]) {
                 @Override
@@ -84,7 +87,7 @@ public class NotifyService extends Service {
         intentActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intentActivity.putExtra("id", classId);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 20, intentActivity, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 20, intentActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
@@ -96,7 +99,7 @@ public class NotifyService extends Service {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        notificationManager.notify((int) classId, mBuilder.build());
+        notificationManager.notify((int) c.getId(), mBuilder.build());
     }
 
     @Override
