@@ -63,6 +63,8 @@ public class ClassesListAdapter extends ArrayAdapter<Classes> {
 
                     location.setText(classroom);
                 }
+                else
+                    location.setText(c.getClassroom());
             }
 
             v.setTag(c.getId());
