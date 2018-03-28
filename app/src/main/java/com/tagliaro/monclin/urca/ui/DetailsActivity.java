@@ -18,19 +18,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DetailsActivity extends AppCompatActivity {
+    private static final String TAG = "DetailsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        ActionBar actionBar = getSupportActionBar();
-
-        if(actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
         Intent intent = getIntent();
         Long id = intent.getLongExtra("id", 0);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
         Classes classes = databaseHandler.getClass(id);
