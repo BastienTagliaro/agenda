@@ -9,15 +9,15 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tagliaro.monclin.urca.background.SyncSetter;
 import com.tagliaro.monclin.urca.R;
 import com.tagliaro.monclin.urca.background.SyncService;
+import com.tagliaro.monclin.urca.background.SyncSetter;
+import com.tagliaro.monclin.urca.utils.Log;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
     private final String TAG = getClass().getSimpleName();
