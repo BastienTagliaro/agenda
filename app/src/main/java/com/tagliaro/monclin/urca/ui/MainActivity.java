@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,19 +16,16 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CalendarView;
 import android.widget.ListView;
 
 import com.tagliaro.monclin.urca.R;
@@ -37,18 +33,26 @@ import com.tagliaro.monclin.urca.background.NotifySetter;
 import com.tagliaro.monclin.urca.background.SyncSetter;
 import com.tagliaro.monclin.urca.utils.Classes;
 import com.tagliaro.monclin.urca.utils.DatabaseHandler;
+import com.tagliaro.monclin.urca.utils.Log;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import devs.mulham.horizontalcalendar.HorizontalCalendar;
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+
+//import android.widget.CalendarView;
+
 public class MainActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
+    public static boolean selected = false;
     private String currentDate;
     private BroadcastReceiver updateReceiver;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
-    CalendarView calendarView;
+    HorizontalCalendar calendarView;
     ListView classesList;
     private final int STORAGE_PERMISSION_CODE = 101;
 
@@ -57,12 +61,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calendarView = findViewById(R.id.calendarView);
+//        calendarView = findViewById(R.id.calendarView);
         classesList = findViewById(R.id.listView);
 
-        if(Build.VERSION.SDK_INT <= 22) {
-            calendarView.setLayoutParams(new ConstraintLayout.LayoutParams(Resources.getSystem().getDisplayMetrics().widthPixels, 320));
-        }
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -2);
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MONTH, 2);
+
+        calendarView = new HorizontalCalendar.Builder(this, R.id.calendarView)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(5)
+                .defaultSelectedDate(Calendar.getInstance())
+                .build();
+
+//        if(Build.VERSION.SDK_INT <= 22) {
+//            calendarView.setLayoutParams(new ConstraintLayout.LayoutParams(Resources.getSystem().getDisplayMetrics().widthPixels, 320));
+//        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions();
@@ -97,16 +112,28 @@ public class MainActivity extends AppCompatActivity {
         intent1.setAction("com.tagliaro.monclin.urca.SET_NOTIFY");
         sendBroadcast(intent1);
 
-        currentDate = dateFormat.format(calendarView.getDate());
+        currentDate = dateFormat.format(Calendar.getInstance().getTime());
 
         if(createFolder(getPackageName())) {
-            setListItems(this, R.layout.classes_view, currentDate);
+            setListItems(this, R.layout.classes_view, currentDate); // doesn't matter?
 
-            calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+//            calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+//                @Override
+//                public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+//                    month += 1;
+//                    currentDate = String.format(Locale.FRANCE, "%02d", day) + "-" + String.format(Locale.FRANCE, "%02d", month) + "-" + Integer.toString(year);
+//                    setListItems(getApplicationContext(), R.layout.classes_view, currentDate);
+//                }
+//            });
+
+            calendarView.setCalendarListener(new HorizontalCalendarListener() {
                 @Override
-                public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
-                    month += 1;
-                    currentDate = String.format(Locale.FRANCE, "%02d", day) + "-" + String.format(Locale.FRANCE, "%02d", month) + "-" + Integer.toString(year);
+                public void onDateSelected(Calendar date, int position) {
+                    selected = true;
+//                    currentDate = String.format(Locale.FRANCE, "%02d", day) + "-" + String.format(Locale.FRANCE, "%02d", month) + "-" + Integer.toString(year);
+
+                    currentDate = dateFormat.format(date.getTime());
+
                     setListItems(getApplicationContext(), R.layout.classes_view, currentDate);
                 }
             });
@@ -139,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(updateReceiver, new IntentFilter("urca.UPDATE_CALENDAR"));
 
-        currentDate = dateFormat.format(calendarView.getDate());
+        currentDate = selected ? dateFormat.format(calendarView.getSelectedDate().getTime()) : dateFormat.format(Calendar.getInstance().getTime());
         setListItems(getApplicationContext(), R.layout.classes_view, currentDate);
     }
 
