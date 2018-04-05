@@ -9,8 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
+import com.tagliaro.monclin.urca.utils.Log;
 import com.tagliaro.monclin.urca.utils.Classes;
 import com.tagliaro.monclin.urca.utils.DatabaseHandler;
 
