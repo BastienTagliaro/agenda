@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/URCA.iml" filepath="$PROJECT_DIR$/URCA.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/horizontalcalendar-release/horizontalcalendar-release.iml" filepath="$PROJECT_DIR$/horizontalcalendar-release/horizontalcalendar-release.iml" />
     </modules>
   </component>
 </project>
