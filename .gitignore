@@ -8,3 +8,4 @@
 /captures
 .externalNativeBuild
 *.old
+/.idea/misc.xml
