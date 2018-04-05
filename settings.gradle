@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':horizontalcalendar-release'
+//project(':horizontalcalendar').projectDir = new File("app/libs/horizontalcalendar")gradle
