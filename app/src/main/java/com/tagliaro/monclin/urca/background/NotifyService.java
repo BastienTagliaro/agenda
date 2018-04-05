@@ -7,23 +7,51 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Process;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
 
 import com.tagliaro.monclin.urca.R;
 import com.tagliaro.monclin.urca.ui.DetailsActivity;
 import com.tagliaro.monclin.urca.utils.Classes;
 import com.tagliaro.monclin.urca.utils.DatabaseHandler;
-
-import java.util.Arrays;
+import com.tagliaro.monclin.urca.utils.Log;
 
 public class NotifyService extends Service {
     public static final String PRIMARY_CHANNEL = "default";
     private final String TAG = getClass().getSimpleName();
+    private ServiceHandler serviceHandler;
+
+    private final class ServiceHandler extends Handler {
+        public ServiceHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            long id = bundle.getLong("id", 0);
+            long timeLeft = bundle.getLong("timeLeft", 0);
+            Log.d("ServiceHandler", "Received id " + id + " with time left " + timeLeft);
+
+            try {
+                Thread.sleep(timeLeft * 1000);
+                showNotification(id);
+            } catch (InterruptedException e) {
+                // Restore interrupt status.
+                Thread.currentThread().interrupt();
+            }
+
+            stopSelf(msg.arg1);
+        }
+    }
 
     @Nullable
     @Override
@@ -33,16 +61,6 @@ public class NotifyService extends Service {
 
     @Override
     public void onCreate() {
-        super.onCreate();
-
-        Log.d(TAG, "Started");
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        final long[] classesIds = intent.getLongArrayExtra("classesIds");
-        long[] timeLeft = intent.getLongArrayExtra("timeLeft");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Default";
             String description = "Primary Channel";
@@ -55,7 +73,30 @@ public class NotifyService extends Service {
                 notificationManager.createNotificationChannel(channel);
         }
 
-        class NotifyTask implements Runnable {
+        Log.d(TAG, "Started");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        HandlerThread thread = new HandlerThread("NotifyThread", Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+
+        Looper serviceLooper = thread.getLooper();
+        ServiceHandler serviceHandler = new ServiceHandler(serviceLooper);
+
+        long id = intent.getLongExtra("id", 0);
+        long timeLeft = intent.getLongExtra("timeLeft", 0);
+
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", id);
+        bundle.putLong("timeLeft", timeLeft);
+
+        Message msg = serviceHandler.obtainMessage();
+        msg.arg1 = startId;
+        msg.setData(bundle);
+        serviceHandler.sendMessage(msg);
+
+/*        class NotifyTask implements Runnable {
             long classId;
             NotifyTask(long c) { classId = c; }
 
@@ -74,9 +115,9 @@ public class NotifyService extends Service {
                     showNotification(this.classId);
                 }
             }, timeLeft[i] * 1000);
-        }
+        }*/
 
-        return Service.START_NOT_STICKY;
+        return Service.START_STICKY;
     }
 
     private void showNotification(long classId) {
@@ -87,7 +128,7 @@ public class NotifyService extends Service {
         intentActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intentActivity.putExtra("id", classId);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 20, intentActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), (int) classId, intentActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
@@ -104,8 +145,8 @@ public class NotifyService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         Log.d(TAG, "Stopped");
+
+        super.onDestroy();
     }
 }
