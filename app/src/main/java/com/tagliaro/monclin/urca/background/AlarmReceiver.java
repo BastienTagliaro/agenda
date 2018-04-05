@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.LongSparseArray;
 
 import com.tagliaro.monclin.urca.utils.Classes;
 import com.tagliaro.monclin.urca.utils.DatabaseHandler;
+import com.tagliaro.monclin.urca.utils.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,8 +42,10 @@ public class AlarmReceiver extends BroadcastReceiver {
             SimpleDateFormat completeDate = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.FRANCE);
             String today = day.format(now);
             DatabaseHandler databaseHandler = new DatabaseHandler(context);
-
-//            databaseHandler.add(new Classes("Test", "2-R06", "desc", "27-03-2018", "20:17", "20:00"));
+//
+//            databaseHandler.add(new Classes("Test", "2-R06", "desc", "30-03-2018", "18:59", "20:00"));
+//            databaseHandler.add(new Classes("TRUC", "2-R06", "desc", "30-03-2018", "19:00", "20:00"));
+//            databaseHandler.add(new Classes("TRUC", "2-R06", "desc", "30-03-2018", "19:01", "20:00"));
             List<Classes> classList = databaseHandler.getClass(today);
 //            List<Classes> classList = new ArrayList<>();
 
@@ -56,7 +58,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     long difference = (date.getTime() - now.getTime())/1000;
 
                     if(difference != 0 && (difference < remindersBeforeSeconds + secondsBeforeRunnable && difference > remindersBeforeSeconds)) {
-                        classesToNotify.put(c.getId(), difference - remindersBeforeSeconds);
+                        classesToNotify.put(c.getId(), (difference - remindersBeforeSeconds) + 5);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -74,11 +76,16 @@ public class AlarmReceiver extends BroadcastReceiver {
             if(classesToNotify.size() > 0) {
                 Log.d(TAG, classesToNotify.size() + " event(s) to notify");
 
-                Intent notifyIntent = new Intent(context, NotifyService.class);
-                notifyIntent.setAction("com.tagliaro.monclin.urca.NOTIFY");
-                notifyIntent.putExtra("classesIds", classesIds);
-                notifyIntent.putExtra("timeLeft", timeLeft);
-                context.startService(notifyIntent);
+                for(int i = 0; i < classesToNotify.size(); ++i) {
+                    Log.d(TAG, "Event " + classesIds[i] + " should be notified in " + timeLeft[i]);
+
+                    Intent notifyIntent = new Intent(context, NotifyService.class);
+                    notifyIntent.setAction("com.tagliaro.monclin.urca.NOTIFY");
+                    notifyIntent.putExtra("id", classesIds[i]);
+                    notifyIntent.putExtra("timeLeft", timeLeft[i]);
+                    context.startService(notifyIntent);
+                }
+
             }
             else {
                 Log.d(TAG, "Nothing to notify");
