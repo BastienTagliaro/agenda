@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tagliaro.monclin.urca.R;
+import com.tagliaro.monclin.urca.background.NotifyService;
+import com.tagliaro.monclin.urca.background.NotifySetter;
 import com.tagliaro.monclin.urca.background.SyncService;
 import com.tagliaro.monclin.urca.background.SyncSetter;
 import com.tagliaro.monclin.urca.utils.Log;
@@ -41,6 +43,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         Log.d(TAG, "Sending intent as preferences have changed");
                         Intent syncIntent = new Intent(getApplicationContext(), SyncService.class);
                         SyncService.enqueueWork(getApplicationContext(), syncIntent);
+                    }
+                    if(key.equals("enable_reminders")) {
+                        boolean enableReminders = sharedPreferences.getBoolean(key, false);
+
+                        if(enableReminders) {
+                            Intent intent = new Intent();
+                            intent.setClass(getApplicationContext(), NotifySetter.class);
+                            intent.setAction("com.tagliaro.monclin.urca.SET_NOTIFY");
+                            sendBroadcast(intent);
+                        }
                     }
                 }
             };
