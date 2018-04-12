@@ -22,8 +22,9 @@ public class NotifySetter extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Log.d(TAG, "Received broadcast " + action);
+        boolean enableReminders = sharedPreferences.getBoolean("enable_reminders", false);
 
-        if(action != null && action.equals("com.tagliaro.monclin.urca.SET_NOTIFY") && sharedPreferences.getBoolean("enable_reminders", false)){
+        if(enableReminders && action != null && action.equals("com.tagliaro.monclin.urca.SET_NOTIFY")){
             Log.d(TAG, "Sending NOTIFY broadcast");
 
             Intent alarmIntent = new Intent(context, AlarmReceiver.class);
